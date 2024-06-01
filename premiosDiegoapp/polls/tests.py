@@ -13,6 +13,11 @@ class QuestionModelTests(TestCase):
         future_question = Question(question_text="¿¿Quien esta en modelo dual?", pub_date=time)
         self.assertIs(future_question.was_published_recently(), False)
 
+def create_question(question_text, days):
+    """Create a question with the given 'question_text' and published the given number of 'days offset to now (negative for question published in the past, positive for question that have yet to be published)"""
+    time = timezone.now() + datetime.timedelta(days=days)
+    return Question.objects.create(question_text=question_text, pub_date=time)
+
 class QuestionIndexViewTests(TestCase):
     def test_no_questions(self):
         """If no questions exist, an appropriate message is displayed"""
@@ -20,3 +25,16 @@ class QuestionIndexViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
+
+    def test_future_questions(self):
+        """Questions with a pub_date in the future aren't displayed on the index page"""
+        create_question("Future question", days=30)
+        response = self.client.get(reverse('polls:index'))
+        self.assertContains(response, "No polls are available.")
+        self.assertQuerysetEqual(response.context['latest_question_list'], [])
+
+    def test_past_questions(self):
+        """Questions with a pub_date in the past are displayed on the index page"""
+        question = create_question("Past question", days=-10)
+        response = self.client.get(reverse('polls:index'))
+        self.assertQuerysetEqual(response.context['latest_question_list'], [question])
