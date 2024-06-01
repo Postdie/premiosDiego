@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 500px;
+
+    border: 1px solid white;
+    padding: 50px;
+    margin-bottom: 20px;
+
+    font-size: 28px;
+
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}

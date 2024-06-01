@@ -1,7 +1,22 @@
-<h1>{{ question.question_text }}</h1>
-<ul>
-    {% for choice in question.choice_set.all %}
-        <li>{{ choice.choice_text }} -- {{ choice.votes }} voto{{ choice.votes|pluralize }}</li>
-    {% endfor %}
-</ul>
-<a href="{% url "polls:detail" question.id %}">¿Te gustaria votar de nuevo?</a>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "polls/style.css" %}">
+    <link rel="stylesheet" href="{% static "polls/result.css" %}">
+    <title>Premios Diego App</title>
+</head>
+<body>
+    <ul>
+        {% for choice in question.choice_set.all %}
+            <li>{{ choice.choice_text }} -- {{ choice.votes }} voto{{ choice.votes|pluralize }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url "polls:detail" question.id %}">¿Te gustaria votar de nuevo?</a>
+</body>
+</html>
+
